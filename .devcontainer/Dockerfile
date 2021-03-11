@@ -9,11 +9,8 @@ COPY ./original-platform-versions /opt/oryx/
 RUN sudo bash -c "echo '. benv \$(cat /opt/oryx/default-platform-versions | tr \"\\n\" \" \") 2>/dev/null' | tee -a /etc/bash.bashrc >> /etc/zsh/zshrc" \
     && /usr/local/bin/oryx-env symlinks-only reset
 
-# Work around annoying problem with rvm warnings, esolve https://github.com/microsoft/vscode-dev-containers/issues/691
-RUN sudo bash -c "\
-    sed -i -e 's/\/scripts\/rvm/\/scripts\/rvm >\/dev\/null 2>\&1/' /etc/bash.bashrc \
-    && sed -i -e 's/\/scripts\/rvm/\/scripts\/rvm >\/dev\/null 2>\&1/' /etc/zsh/zshrc" \
-    && bash -c "\
+# Remove SDKMAN links that are not needed
+RUN bash -c "\
     . ${SDKMAN_DIR}/bin/sdkman-init.sh \
     && sdk uninstall java opt-java-lts \
     && sdk uninstall java opt-java-11 \

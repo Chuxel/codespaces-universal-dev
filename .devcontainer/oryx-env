@@ -19,8 +19,10 @@ PLATFORM_MODE=${2:-"detect"}
 
 echo "[Start] $(date)"
 
-# Make sure file exists
-touch /opt/oryx/default-platform-versions
+# Make sure defaults file exists
+if [ ! -f "/opt/oryx/default-platform-versions" ]; then
+    cp /opt/oryx/original-platform-versions /opt/oryx/default-platform-versions
+fi
 
 if [ "${PLATFORM_MODE}" = "detect" ]; then
     echo "Detecting platform versions..."
